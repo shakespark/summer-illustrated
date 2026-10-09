@@ -41,6 +41,7 @@
 - `04-ventura.jpg` — File:Citibank and City National Bank Buildings, Ventura & Sepulveda, Sherman Oaks.JPG — Cbl62 (talk) — CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File%3ACitibank_and_City_National_Bank_Buildings%2C_Ventura_%26_Sepulveda%2C_Sherman_Oaks.JPG
 - `02-stockcert.jpg` — File:Baltimore and Ohio Railroad stock certificate.jpg — Baltimore and Ohio Railroad — Public domain — https://commons.wikimedia.org/wiki/File%3ABaltimore_and_Ohio_Railroad_stock_certificate.jpg
 - `02-sliderule.jpg` — File:Keuffel & Esser 20.5-inch Slide Rule (30245412953).jpg — Central Intelligence Agency from Washington, D.C. — Public domain — https://commons.wikimedia.org/wiki/File%3AKeuffel_%26_Esser_20.5-inch_Slide_Rule_%2830245412953%29.jpg
+- `02-thule.jpg` — File:Sac-b36-thule-1950s.jpg — USAF — Public domain — https://commons.wikimedia.org/wiki/File%3ASac-b36-thule-1950s.jpg
 - `04-syringe.jpg` — File:Record-type hypodermic syringe, London, England Wellcome L0057737.jpg — 作者不详 — CC BY 4.0 — https://commons.wikimedia.org/wiki/File%3ARecord-type_hypodermic_syringe%2C_London%2C_England_Wellcome_L0057737.jpg
 - `04-banshee.jpg` — File:Banshee.jpg — W.H. Brooke — Public domain — https://commons.wikimedia.org/wiki/File%3ABanshee.jpg
 - `06-scrapyard.jpg` — File:Auto scrapyard 1.jpg — IFCAR — Public domain — https://commons.wikimedia.org/wiki/File%3AAuto_scrapyard_1.jpg

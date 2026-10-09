@@ -3,9 +3,11 @@
 长章拆成几页（02a、02b…），每页的段落范围读 assets/chapters.js 里的 p: [起, 止]。
 查：小节标题和顺序、读前/读后分界、场景地图（开头几个词是否照抄、是否覆盖原书的分隔）、词条（.en 重复、.loc 是否在原文对应段落里、
 是否放在对应的场景下、顺序）、引用块数量、图片、页面里的 <style>/<script>/写死的颜色、直引号，以及剧透（后面章节才出现的名字）。"""
-import collections, glob, html, os, re, sys
+import collections, glob, os, re, sys
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-norm = lambda s: re.sub(r"\s+", " ", html.unescape(s).replace("*", "").replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')).strip()
+# 与具体书无关的检查（词条、引用、图片、页面里不该有的东西）在共享模块里，所有伴读站共用
+sys.path.insert(0, os.path.expanduser("~/tutorials-deploy/scripts"))
+from lint_common import norm, load_paras, check_entries, check_quotes, check_images, check_markup, page_text, counts
 
 # 每页的段落范围和开头几个词（chapters.js，每页一行）
 PAGES = {m.group(1): (int(m.group(2)), int(m.group(3)), m.group(4)) for m in re.finditer(
@@ -39,13 +41,7 @@ for path in sys.argv[1:]:
     t = open(path, encoding="utf-8").read(); errs = []
     pid = re.search(r"(\d\d[a-z]?)\.html$", path).group(1); nn = pid[:2]; N = int(nn)
     src = os.path.join(ROOT, f"source/text/{nn}.txt")
-    paras, book_secs = {}, []
-    for line in (open(src, encoding="utf-8").read().splitlines() if os.path.exists(src) else []):
-        m = re.match(r"\[(\d+)\] (?:\{L\} )?(.*)$", line)
-        if line.startswith("## §"): book_secs.append(None)
-        elif m:
-            paras[int(m.group(1))] = norm(m.group(2))
-            if book_secs and book_secs[-1] is None: book_secs[-1] = int(m.group(1))
+    paras, book_secs = load_paras(src)
     if N and pid not in PAGES: errs.append(f"chapters.js 里没有 {pid} 这一页")
     P0, P1, FROM = PAGES.get(pid, (1, max(paras) if paras else 0, None))
     paras = {k: v for k, v in paras.items() if P0 <= k <= P1}          # 只看这一页的段落
@@ -92,42 +88,12 @@ for path in sys.argv[1:]:
             if m.group(1): cur = int(m.group(1))
             elif cur in bounds and not bounds[cur][0] <= int(m.group(2)) < bounds[cur][1]: errs.append(f"第 {m.group(2)} 段的词条放在了场景 {cur}（第 {bounds[cur][0]}–{bounds[cur][1] - 1} 段）下面")
 
-    # 词条
-    ens = re.findall(r'<div class="en">(.*?)</div>', t)
-    for e in sorted({e for e in ens if ens.count(e) > 1}): errs.append(f".en 重复：{e}")
-    locs = re.findall(r'<div class="loc" data-p="(\d+)">(.*?)</div>', t)
-    if len(locs) != len(ens): errs.append(f"词条 {len(ens)} 条，但 .loc 只有 {len(locs)} 个")
-    last = 0
-    for p, loc in locs:
-        s = norm(re.sub(r"<[^>]+>", "", loc)).strip("… ").strip()
-        n = len(s.split()); p = int(p)
-        if paras and s not in paras.get(p, ""):
-            where = [k for k, v in paras.items() if s in v]
-            errs.append(f".loc 不在第 {p} 段：{s!r}" + (f"（在第 {where[0]} 段）" if where else f"（这一页的第 {P0}–{P1} 段里都找不到）"))
-        if n > 9: errs.append(f".loc 太长（{n} 词）：{s!r}")
-        if p < last: errs.append(f"词条顺序：第 {p} 段的词条排在第 {last} 段之后：{s!r}")
-        last = max(last, p)
-    traps = len(re.findall(r'class="entry trap"', t))
-    words = sum(len(v.split()) for v in paras.values())
-    if N and paras and not words / 1000 * 13 <= len(ens) <= 180: errs.append(f"词条 {len(ens)} 条，这一页 {words} 词，应在 {int(words / 1000 * 13) + 1}–180 条之间")
-    if N and ens and traps * 3 < len(ens): errs.append(f"trap 只有 {traps}/{len(ens)}，应占三分之一以上")
-
-    # 引用、图、样式
-    q = len(re.findall(r'<blockquote class="quote">', t))
-    if q > 3: errs.append(f"引用块 {q} 处，超过 3 处")
-    imgs = re.findall(r'<img[^>]+src="([^"]+)"', t)
-    for i in imgs:
-        if not re.fullmatch(r"\.\./assets/img/\d\d-[a-z0-9-]+\.jpg", i) or not os.path.exists(os.path.join(os.path.dirname(path), i)): errs.append(f"图片不存在，或不是 ../assets/img/NN-名字.jpg：{i}")
-    svgs = len(re.findall(r"<svg\b", t))
-    need = (3, 2) if N else (2, 1)
-    if len(set(imgs)) < need[0] or svgs < need[1]: errs.append(f"图不够：照片 {len(set(imgs))}，SVG {svgs}（至少照片 {need[0]} 张、SVG {need[1]} 张）")
-    if re.search(r"\.epub|split_0\d\d|filepos|source/", t): errs.append("页面里出现了原书材料的路径或文件名")
-    if re.search(r"<svg(?![^>]*class=\"diagram\")", t): errs.append("有 SVG 没用 class=\"diagram\"")
-    if re.search(r"<style|<script(?![^>]*src=)", t): errs.append("页面里有 <style> 或内联 <script>")
-    for m in set(re.findall(r'(?:fill|stroke)="(#[0-9a-fA-F]+|[a-z]+)"', t)) - {"none", "currentColor"}: errs.append(f"SVG 里写死了颜色：{m}")
-    if re.search(r'style="', t): errs.append('有内联 style="…"')
-    text = html.unescape(re.sub(r"<[^>]+>", " ", t))
-    if '"' in text: errs.append('正文里有英文直引号 "，中文引号用「」，英文引号用弯引号 “ ”')
+    # 词条、引用、图、样式（共享模块）
+    errs += check_entries(t, paras, per_k=13 if N else None, max_n=180 if N else None, trap_ratio=1 / 3 if N else None)
+    errs += check_quotes(t, 3)
+    errs += check_images(t, path, *((3, 2) if N else (2, 1)))
+    errs += check_markup(t)
+    text = page_text(t)
 
     # 剧透：这一页不能出现后面章节才登场的名字和设定
     here = (N, P1) if N else (1, 10 ** 6)
@@ -137,7 +103,8 @@ for path in sys.argv[1:]:
         m = re.search(pat, text)
         if m and N < k: errs.append(f"剧透：「{m.group(0)}」第 {k} 章以前的页面不能提")
 
-    print(("✗" if errs else "✓"), path, f"场景 {len(scenes)} 词条 {len(ens)}（trap {traps}） 照片 {len(set(imgs))} SVG {svgs} 引用 {q} 检查题 {len(re.findall('class=.check.', t))}")
+    c = counts(t)
+    print(("✗" if errs else "✓"), path, f"场景 {len(scenes)} 词条 {c['词条']}（trap {c['trap']}） 照片 {c['照片']} SVG {c['SVG']} 引用 {c['引用']} 检查题 {c['检查题']}")
     for e in errs: print("    " + e)
     bad += bool(errs)
 sys.exit(1 if bad else 0)

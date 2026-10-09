@@ -19,9 +19,9 @@ assets/ds.js          共享脚本：顶栏、章头、前情、读前/读后分
 assets/chapters.js    全书目录数据（标题、一句话、开场时间地点、前情用的 recap）和已写好的页的列表；以页为单位，每页一行，lint 读其中的段号范围
 assets/img/           图片（来自维基共享资源，出处见 CREDITS.md）
 tools/extract.py      从 source/epub 提取每章文本到 source/text
-tools/lint.py         章节页结构检查 + 剧透检查
-tools/overlap.py      与原书长片段重合检查
-tools/check.mjs       浏览器质检（浅/深 × 400/1100）
+tools/lint.py         章节页结构检查 + 剧透检查（本书的规则在这里；通用部分用 ~/tutorials-deploy/scripts/lint_common.py）
+tools/overlap.py      与原书长片段重合检查（转调 ~/tutorials-deploy/scripts/overlap.py）
+tools/check.mjs       浏览器质检（浅/深 × 400/1100；转调 ~/tutorials-deploy/scripts/check.mjs）
 tools/fetch_img.py    取图（转调 ~/tutorials-deploy/scripts/fetch_img.py）
 ```
 
