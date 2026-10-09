@@ -3,7 +3,7 @@
 陪读英文原版 *The Door into Summer*（Robert A. Heinlein，1957）的伴读站：短章一章一页、长章拆成几页（02a、02b…，方便配着 Audible 听），读前给人物、场景地图、背景、「书里的世界」和图，
 读时查词与短语，读后是句子讲解和理解检查。小说，所以**不剧透**是第一条规矩。
 
-- 线上地址（计划）：https://t.miaowuao.cn/summer/ ，部署方式见 `~/tutorials-deploy`。**目前还没有建仓库、没有部署。**
+- 线上地址：https://t.miaowuao.cn/summer/ ，仓库 shakespark/summer-illustrated，推送 main 即部署（见 `~/tutorials-deploy`）。
 - 本站不是译本。原书的 epub 和提取的文本在 `source/`，版权归原作者与出版方，`.gitignore` 排除，不入库、不部署。
 - 编写规范：`AUTHORING.md`；样板：`chapters/01.html`。
 
