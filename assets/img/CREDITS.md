@@ -20,7 +20,6 @@
 - `05-camphale.jpg` — File:10th mountain 1943.jpg — US Army photographer — Public domain — https://commons.wikimedia.org/wiki/File%3A10th_mountain_1943.jpg
 - `02-underwood.jpg` — File:Underwood Standard Typewriter No. 5 (colored).jpg — AnonymousUnknown author — Public domain — https://commons.wikimedia.org/wiki/File%3AUnderwood_Standard_Typewriter_No._5_%28colored%29.jpg
 - `03-catspaw.jpg` — File:Aap dwingt een kat de kastanjes uit het vuur te halen, RP-P-OB-49.668.jpg — Rijksmuseum — CC0 — https://commons.wikimedia.org/wiki/File%3AAap_dwingt_een_kat_de_kastanjes_uit_het_vuur_te_halen%2C_RP-P-OB-49.668.jpg
-- `02-thule.jpg` — File:Sac-b36-thule-1950s.jpg — USAF — Public domain — https://commons.wikimedia.org/wiki/File%3ASac-b36-thule-1950s.jpg
 - `05-hospitalrobot.jpg` — File:Hospital delivery robot having priority to elevators.jpg — Mikael Häggström — CC0 — https://commons.wikimedia.org/wiki/File%3AHospital_delivery_robot_having_priority_to_elevators.jpg
 - `05-geminids.jpg` — File:Geminids over Gemini North 2020 20201213 sworl-cc.jpg — International Gemini Observatory/NOIRLab/NSF/AURA — CC BY 4.0 — https://commons.wikimedia.org/wiki/File%3AGeminids_over_Gemini_North_2020_20201213_sworl-cc.jpg
 - `02-hothands.jpg` — File:Mechanical Arms Used in Hot Cells ORNL Oak Ridge (8740233905).jpg — doe-oakridge — Public domain — https://commons.wikimedia.org/wiki/File%3AMechanical_Arms_Used_in_Hot_Cells_ORNL_Oak_Ridge_%288740233905%29.jpg
