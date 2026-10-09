@@ -240,3 +240,25 @@ table.world td:nth-child(2) { background: var(--accent-soft); }
 .listen i { font-family: var(--serif); color: var(--fg); }
 .listen b { color: var(--fg); }
 @media (max-width: 600px) { details.recap li { grid-template-columns: 1fr; gap: 0; } }
+
+/* 书里的点子，后来怎样了（ideas.html） */
+.idea { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; margin: 14px 0; }
+.idea h3 { margin: 0 0 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+.idea h3 .en { font-family: var(--serif); font-weight: 400; font-size: 14.5px; color: var(--muted); }
+.idea dl { margin: 0; display: grid; grid-template-columns: 92px 1fr; gap: 8px 14px; }
+.idea dt { color: var(--muted); font-size: 13.5px; padding-top: 2px; }
+.idea dd { margin: 0; }
+.idea .fig { margin: 14px 0 2px; }
+.idea .stub { display: none; margin: 0; color: var(--muted); font-style: italic; }
+.idea.locked > :not(.stub) { display: none; }
+.idea.locked .stub { display: block; }
+.idea.locked { background: none; border-style: dashed; padding: 10px 18px; }
+.verdict { font-size: 12.5px; font-weight: 600; padding: 2px 10px; border-radius: 999px; white-space: nowrap; background: var(--surface-2); color: var(--muted); }
+.verdict.v-hit { background: var(--ok-soft); color: var(--ok); }
+.verdict.v-half, .verdict.v-wip { background: var(--warn-soft); color: var(--warn); }
+.verdict.v-miss { background: var(--bad-soft); color: var(--bad); }
+.verdict.v-blind { background: var(--accent-soft); color: var(--accent); }
+.ideas-gate { margin: 18px 0 8px; }
+@media (max-width: 600px) { .idea dl { grid-template-columns: 1fr; gap: 2px; } .idea dt { margin-top: 8px; font-weight: 600; } }
+body:not(.after-locked) .gate.ideas-gate .btn { display: inline-block; }
+.idea .fig { max-width: 440px; margin-left: auto; margin-right: auto; }

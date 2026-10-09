@@ -11,6 +11,7 @@
 
 ```
 index.html            首页：目录、进度、我的故事线（只揭开已读的章）、我的词本
+ideas.html            书里的点子，后来怎样了：1956 年的设想 对 真实的 2000 年和今天；每条按阅读进度揭开（data-after=页id）
 chapters/00.html      开读之前（作者、读法、本站用法）
 chapters/<页id>.html   正文十二章，共 18 页：01、02a–c、03、04、05a–b、06a–b、07、08a–b、09、10a–b、11、12
 assets/style.css      共享样式（颜色 token 与其它教程站一致）

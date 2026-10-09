@@ -49,7 +49,7 @@
     const c = byId(document.body.dataset.page);
     document.body.prepend(h("div", { class: "topbar" }, h("div", { class: "topbar-inner" },
       h("a", { class: "home", href: `${ROOT}index.html` }, SITE),
-      h("span", { class: "crumb" }, c ? chTitle(c) : ""),
+      h("span", { class: "crumb" }, c ? chTitle(c) : document.body.hasAttribute("data-ideas") ? "书里的点子，后来怎样了" : ""),
       themeBtn())));
     document.body.append(h("footer", { class: "site-footer" },
       h("a", { href: "https://beian.miit.gov.cn/", target: "_blank", rel: "noopener" }, "京ICP备18057656号-1")));
@@ -84,7 +84,8 @@
     main.append(h("div", { class: "chapter-end" }, done, h("div", { class: "nav" },
       prev ? h("a", { class: "btn", href: chHref(prev.id) }, `← ${chLabel(prev)}`) : null,
       h("a", { class: "btn", href: `${ROOT}index.html` }, "目录"),
-      next && READY.has(next.id) ? h("a", { class: "btn primary", href: chHref(next.id) }, `${chLabel(next)} →`) : null)));
+      next && READY.has(next.id) ? h("a", { class: "btn primary", href: chHref(next.id) }, `${chLabel(next)} →`) : null,
+      !next ? h("a", { class: "btn primary", href: `${ROOT}ideas.html` }, "书里的点子，后来怎样了 →") : null)));
   }
 
   // 读前 / 读后分界：<section class="after"> 里是会透露这一章情节的内容，默认收起，读完点一下才展开（记在 ds-after-页id）
@@ -190,6 +191,29 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => { mountChrome(); wireGate(); wireSecmap(); wireEntries(); mountHome(); });
+  // 「书里的点子，后来怎样了」（ideas.html）：<div class="idea" data-after="页id" data-v="hit|half|wip|miss|blind|sum">
+  // 每条挂在它首次出现的那一页上，那一页标记读完才揭开；ds-ideas-all = 1 时全部揭开
+  function mountIdeas() {
+    const ideas = [...document.querySelectorAll(".idea[data-after]")];
+    if (!ideas.length) return;
+    const V = { hit: "猜中了", half: "猜对一半", wip: "还在路上", miss: "没成", blind: "没想到" };
+    const btn = document.getElementById("ideas-all"), count = document.getElementById("ideas-count");
+    for (const el of ideas) {
+      if (V[el.dataset.v]) el.querySelector("h3").prepend(h("span", { class: `verdict v-${el.dataset.v}` }, V[el.dataset.v]));
+      const c = byId(el.dataset.after);
+      el.append(h("p", { class: "stub" }, "读完 ", h("a", { href: chHref(c.id) }, chLabel(c)), " 并标记后，这一条才揭开。"));
+    }
+    const paint = () => {
+      const all = LS.get("ds-ideas-all") === "1";
+      let open = 0;
+      for (const el of ideas) { const on = all || isDone(el.dataset.after); el.classList.toggle("locked", !on); open += on; }
+      count.textContent = `已揭开 ${open} / ${ideas.length} 条`;
+      btn.textContent = all ? "恢复按阅读进度显示" : "我读完全书了，全部揭开";
+    };
+    btn.onclick = () => { LS.set("ds-ideas-all", LS.get("ds-ideas-all") === "1" ? null : "1"); paint(); };
+    paint();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => { mountChrome(); wireGate(); wireSecmap(); wireEntries(); mountHome(); mountIdeas(); });
   window.DS = { h, LS, ROOT, chHref, chLabel, isDone };
 })();
