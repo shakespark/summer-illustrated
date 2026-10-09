@@ -215,5 +215,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => { mountChrome(); wireGate(); wireSecmap(); wireEntries(); mountHome(); mountIdeas(); });
+  // 跨设备同步：模块在首页仓库里（/_home/sync.js），所有教程站共用。只在线上加载；本地预览要联调时设 localStorage["sync-dev"] = "1"
+  try { if (location.hostname === "t.miaowuao.cn" || localStorage.getItem("sync-dev")) document.head.append(Object.assign(document.createElement("script"), { src: "/_home/sync.js" })); } catch (e) {}
   window.DS = { h, LS, ROOT, chHref, chLabel, isDone };
 })();
